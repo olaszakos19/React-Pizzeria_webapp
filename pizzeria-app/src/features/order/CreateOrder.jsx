@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Form, redirect, useActionData, useNavigation } from "react-router-dom";
 import { createOrder } from "../../services/apiRestaurant";
 import Button from "../../ui/Button";
+import { useSelector } from "react-redux";
 // https://uibakery.io/regex-library/phone-number
 const isValidPhone = (str) =>
   /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/.test(
@@ -36,7 +37,7 @@ const fakeCart = [
 function CreateOrder() {
   const navigation = useNavigation();
   const isSubmiting = navigation.state === "s";
-
+  const username = useSelector((state) => state.user.userName);
   const formErrors = useActionData();
 
   // const [withPriority, setWithPriority] = useState(false);
@@ -49,21 +50,30 @@ function CreateOrder() {
       <Form method="POST">
         <div className="mb-5 flex gap-2 flex-col sm:flex-row sm:items-center">
           <label className="sm:basis-40">First Name</label>
-          <input type="text" name="customer" className="input grow" required />
+          <input type="text" name="customer" className="input grow" defaultValue={username} required />
         </div>
 
         <div className="mb-5 flex gap-2 flex-col sm:flex-row sm:items-center">
           <label className="sm:basis-40">Phone number</label>
           <div className="grow">
             <input type="tel" name="phone" className="input w-full" required />
-            {formErrors?.phone && <p className="text-xs text-red-700 bg-red-100 rounded-full p-2 mt-2">{formErrors.phone}</p>}
+            {formErrors?.phone && (
+              <p className="text-xs text-red-700 bg-red-100 rounded-full p-2 mt-2">
+                {formErrors.phone}
+              </p>
+            )}
           </div>
         </div>
 
         <div className="mb-5 flex gap-2 flex-col sm:flex-row sm:items-center">
           <label className="sm:basis-40">Address</label>
           <div className="grow">
-            <input type="text" name="address" className="input w-full" required />
+            <input
+              type="text"
+              name="address"
+              className="input w-full"
+              required
+            />
           </div>
         </div>
 
@@ -76,7 +86,9 @@ function CreateOrder() {
             // onChange={(e) => setWithPriority(e.target.checked)}
             className="h-6 w-6 accent-yellow-400 focus:outline-none focus:ring focus:ring-yellow-400 focus:ring-offset-2"
           />
-          <label htmlFor="priority" className="font-medium">Want to yo give your order priority?</label>
+          <label htmlFor="priority" className="font-medium">
+            Want to yo give your order priority?
+          </label>
         </div>
 
         <div>
