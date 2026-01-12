@@ -15,7 +15,7 @@ function Cart() {
 
   const dispath = useDispatch();
   console.log(cart);
-  if(!cart) return <EmptyCart />
+  if(!cart.length) return <EmptyCart />
 
   return (
     <div className='py-3 px-4'>
